@@ -49,10 +49,10 @@ let myCaches = [
         cacheName: CACHE_NAME_APP,
         urlsToCache: urlsApp
     },
-    {
+   /* {
         cacheName: CACHE_NAME_LOCATIONS,
         urlsToCache: urlsLocations
-    },
+    },*/
     {
         cacheName: CACHE_NAME_FOOD,
         urlsToCache: urlsFood
