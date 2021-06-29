@@ -23,7 +23,9 @@ let urlsApp = [
     'js/navbar.js',
     'css/materialize.min.css',
     'style.css',
-    'script.js'
+    'script.js',
+    'js/http_code.jquery.com_jquery-3.6.0.js',
+    'js/http_button.glitch.me_button.js'
 ]
 
 let urlsLocations = [
@@ -116,100 +118,55 @@ self.addEventListener('fetch', function (event) {
             break;
         }
     }
+
     if (urlLocations) {
-        //network first
-        console.log("fetch from server");
+        //try network first
+        console.log("fetch from server: ", event.request.url);
         event.respondWith(
-            fetch(event.request).then(
-                function (response) {
-                    // Check if we received a valid response
-                    if (!response) {
-                        console.error("fetch eventhandler error 1: no response");
-                        //return offline page from cache
-                        caches.match('offline.html').then(function (response) {
-                            if (response) {
-                                return response
-                            } else {
-                                return Response.error();
-                            }
-                        });
-                    }
-                    if (response.status !== 200 && response.status !== 201) { // || response.type !== 'basic'
-                        console.warn("fetch eventhandler error 1: bad response", response.status, response.type);
-                        return response;
-                    }
-                    // everything ok
-                    return response;
-                }
-            ).catch(function (err_response) {
-                // a failed access is ok, just signal with status 204
-                console.warn("status 204, statusText:", err_response);
-                //return offline page from cache
-                caches.match('offline.html').then(function (offline_response) {
-                    if (offline_response) {
-                        console.log('returning offline.html');
-                        return offline_response;
-                    } else {
-                        console.log('returning error');
-                        return Response.error();
-                    }
-                }, function (err) {
-                    console.log('did not found offline.html:' + err);
-                    return Response.error();
-                });
+            fetch(event.request).catch(function () {
+                console.log("fetch offline page from cache: ", event.request.url);
+               return caches.match('offline.html');
             }))
     } else {
         //try cache first (in general)
+        console.log("try cache: ", event.request.url);
         event.respondWith(
-            caches.match(event.request).then(function (response) {
-                if (response) {
-                    //cache hit - return response
-                    console.log("cache hit: " + event.request.url);
-                    return response
+            caches.match(event.request).catch(function () {
+                if (urlFood) {
+                    console.log("fetch offline page from cache: ", event.request.url);
+                    return caches.match('offline.html');
                 } else {
-                    console.log("request not in cache: " + event.request.url);
-                    if (urlFood) {
-                        //return offline page from cache
-                        caches.match('offline.html').then(function (response) {
-                            if (response) {
-                                return response
-                            } else {
+                    console.log("fallback to network: ", event.request.url);
+                    fetch(event.request).then(
+                        function (response) {
+                            // Check if we received a valid response
+                            if (!response) {
+                                console.error("fetch eventhandler error 1: no response");
                                 return Response.error();
                             }
-                        });
-                    } else {
-                        //try network next
-                        fetch(event.request).then(
-                            function (response) {
-                                // Check if we received a valid response
-                                if (!response) {
-                                    console.error("fetch eventhandler error 1: no response");
-                                    return Response.error();
-                                }
-                                if (response.status !== 200 && response.status !== 201) { // || response.type !== 'basic'
-                                    console.warn("fetch eventhandler error 1: bad response", response.status, response.type);
-                                    return response;
-                                }
-                                // we received a valid response
-                                // Caching
-                                // IMPORTANT: Clone the response. A response is a stream
-                                // and because we want the browser to consume the response
-                                // as well as the cache consuming the response, we need
-                                // to clone it so we have two streams.
-                                let responseToCache = response.clone();
-                                caches.open(CACHE_NAME_APP)
-                                    .then(function (cache) {
-                                        console.log(`cached ${event.request.url}`);
-                                        cache.put(event.request, responseToCache).then(function () {
-                                        });
-                                    });
+                            if (response.status !== 200 && response.status !== 201) { // || response.type !== 'basic'
+                                console.warn("fetch eventhandler error 1: bad response", response.status, response.type);
                                 return response;
-                            }, function (err_response) {
-                                console.error("fetch eventhandler:", err_response);
-                                return Response.error();
                             }
-                        )
-                    }
+                            // we received a valid response
+                            // Caching
+                            // IMPORTANT: Clone the response. A response is a stream
+                            // and because we want the browser to consume the response
+                            // as well as the cache consuming the response, we need
+                            // to clone it so we have two streams.
+                            let responseToCache = response.clone();
+                            caches.open(CACHE_NAME_APP)
+                                .then(function (cache) {
+                                    console.log(`cached ${event.request.url}`);
+                                    cache.put(event.request, responseToCache).then(function () {
+                                    });
+                                });
+                            return response;
+                        }, function (err_response) {
+                            console.error("fetch eventhandler:", err_response);
+                            return Response.error();
+                        }
+                    )
                 }
             })
         )
