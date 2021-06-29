@@ -1,34 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Hello!</title>
+    <title>Summer</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <!-- Manifest -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <!-- Material Design -->
+    <link type="text/css" href="css/materialize.min.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
 </head>
 <body>
-<h1>
-    Installable
-</h1>
 
-<p>
-    Make me installable, follow the pups
-    <a href="https://web.dev/codelab-make-installable/">instructions</a> here.
-</p>
+<nav class="hide-on-med-and-down">
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Summer</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="food.html">Food</a></li>
+            <li><a href="index.html">Locations</a></li>
+        </ul>
+    </div>
+</nav>
 
-<!-- Install button, hidden by default -->
-<div id="installContainer" class="hidden">
-    <button id="butInstall" type="button">
-        Install
-    </button>
+<ul id="slide-out" class="sidenav">
+    <li>
+        <div class="user-view">
+            <div class="background">
+                <img class="responsive-img" src="images/water.jpg">
+            </div>
+            <img class="circle" src="images/sun.png">
+        </div>
+    </li>
+    <li><a href="index.html">Locations</a></li>
+    <li><a href="food.html">Food</a></li>
+    <li>
+        <div class="divider"></div>
+    </li>
+    <li><a class="subheader">Information</a></li>
+    <li><a class="waves-effect" href="#!">About</a></li>
+</ul>
+<a href="#" data-target="slide-out" class="sidenav-trigger hide"><i class="material-icons">menu</i></a>
+
+<h1>Locations</h1>
+
+<div class="container">
+    <div class="row hide-on-med-and-down">
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer1.jpg">
+                    <span class="card-title">Lavender Field</span>
+                </div>
+                <div class="card-content">
+                    <p>The Provence lavender fields are among the best in the world, and they’re certainly among the
+                        most
+                        famous. Come early summer, when the spring poppies have all but disappeared, bright lavender
+                        flowers start to transform the already beatific landscape into a patchwork of colour.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer2.jpg">
+                    <span class="card-title">Sunflower</span>
+                </div>
+                <div class="card-content">
+                    <p>With bright blooms that go from mid-summer to early fall, sunflowers say “summer” like no other
+                        plant.
+                        Plus, 2021 has been designated the “Year of the Sunflower”! What better way to celebrate than
+                        growing some yourself?</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer3.jpg">
+                    <span class="card-title">South seas</span>
+                </div>
+                <div class="card-content">
+                    <p>How about a trip to the south seas? There is no place closer to paradise,
+                        when you sit on the beach a beautiful sunrise in front of you.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer4.jpg">
+                    <span class="card-title">Mountain Lake</span>
+                </div>
+                <div class="card-content">
+                    <p>There is nothing more refreshing than taking a jump into the cold waters of an emerald colored lake in
+                        front of snowcapped mountains on a hot summers day.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row hide-on-large-only">
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer1.jpg">
+                    <span class="card-title">Lavender Field</span>
+                </div>
+                <div class="card-content">
+                    <p>The Provence lavender fields are among the best in the world, and they’re certainly among the
+                        most
+                        famous. Come early summer, when the spring poppies have all but disappeared, bright lavender
+                        flowers start to transform the already beatific landscape into a patchwork of colour.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer2.jpg">
+                    <span class="card-title">Sunflower</span>
+                </div>
+                <div class="card-content">
+                    <p>With bright blooms that go from mid-summer to early fall, sunflowers say “summer” like no other
+                        plant.
+                        Plus, 2021 has been designated the “Year of the Sunflower”! What better way to celebrate than
+                        growing some yourself?</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row hide-on-large-only">
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer3.jpg">
+                    <span class="card-title">South seas</span>
+                </div>
+                <div class="card-content">
+                    <p>How about a trip to the south seas? There is no place closer to paradise,
+                        when you sit on the beach a beautiful sunrise in front of you.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col s6 m6 l4 xl3">
+            <div class="card z-depth-3">
+                <div class="card-image">
+                    <img src="images/summer4.jpg">
+                    <span class="card-title">Mountain Lake</span>
+                </div>
+                <div class="card-content">
+                    <p>There is nothing more refreshing than taking a jump into the cold waters of an emerald lake in
+                        front of snowcapped
+                        mountains on a hot summers day.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Install button, hidden by default -->
+    <div class="divider"></div>
+    <div class="section row">
+        <div id="installContainer" class="hidden right-align">
+            <button id="butInstall" type="button">
+                Install
+            </button>
+            <span>
+                Make me installable, follow the pups
+                <a href="https://web.dev/codelab-make-installable/">instructions</a> here.
+            </span>
+        </div>
+    </div>
 </div>
 
 <!-- import the webpage's javascript file -->
-<script src="/script.js" defer></script>
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+        integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script> -->
+<script type="text/javascript" src="js/materialize.min.js" rel="stylesheet"></script>
+<script src="script.js" defer></script>
+<script src="js/navbar.js" rel="stylesheet"></script>
 <!-- include the Glitch button to show what the webpage is about and
       to make it easier for folks to view source and remix -->
 <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>

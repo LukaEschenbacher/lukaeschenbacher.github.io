@@ -9,7 +9,6 @@ a, a:visited {
 }
 
 h1 {
-    color: #FF0000;
     text-align: center;
 }
 
@@ -17,7 +16,13 @@ h1 {
     display: none !important;
 }
 
-#installContainer {
+.card-content p {
+    color: black;
+    font-size: medium;
+
+}
+
+#installContainers {
     position: absolute;
     bottom: 1em;
     display: flex;
@@ -31,4 +36,9 @@ h1 {
     color: white;
     font-size: 1em;
     padding: 0.75em;
+    margin-right: 2em;
+}
+
+.nav-wrapper {
+    background-color: #F98B88;
 }
