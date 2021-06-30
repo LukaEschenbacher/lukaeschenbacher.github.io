@@ -130,6 +130,7 @@ self.addEventListener('fetch', function (event) {
     } else {
         //try cache first (in general)
         console.log("try cache: ", event.request.url);
+        console.log("event request", event.request);
         event.respondWith(
             caches.match(event.request).catch(function () {
                 if (urlFood) {
