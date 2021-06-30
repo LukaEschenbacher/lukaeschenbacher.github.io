@@ -96,7 +96,7 @@ self.addEventListener('activate', (event) => {
 
     // Löschen von alten caches zu vorherigen Versionen
     // caches die nicht gelöscht werden sollen hier einfügen
-    let cacheWhitelist = [CACHE_NAME_FOOD, CACHE_NAME_LOCATIONS];
+    let cacheWhitelist = [CACHE_NAME_APP];
     // let cacheWhitelist = [];
 
     event.waitUntil(
