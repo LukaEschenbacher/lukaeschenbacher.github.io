@@ -92,8 +92,26 @@ self.addEventListener('activate', (event) => {
         }
     })());*/
 
-    // Tell the active service worker to take control of the page immediately.
-    event.waitUntil(clients.claim());
+    console.log(`ServiceWorker activated at ${new Date().toLocaleTimeString()}`);
+
+    // Löschen von alten caches zu vorherigen Versionen
+    // caches die nicht gelöscht werden sollen hier einfügen
+    let cacheWhitelist = [CACHE_NAME_APP, CACHE_NAME_FOOD, CACHE_NAME_LOCATIONS];
+    // let cacheWhitelist = [];
+
+    event.waitUntil(
+        caches.keys().then(function (cacheNames) {
+            return Promise.all(
+                cacheNames.map(function (cacheName) {
+                    if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        console.log("deleting old cache " + cacheName);
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
+
 });
 
 // is called after HTTP request
