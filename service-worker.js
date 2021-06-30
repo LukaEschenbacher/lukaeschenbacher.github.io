@@ -1,6 +1,7 @@
 const CACHE_NAME_FOOD = 'food-cache';
 const CACHE_NAME_LOCATIONS = 'locations-cache';
 const CACHE_NAME_APP = 'general-cache';
+const VERSION = 2.9;
 
 let urlsApp = [
     'manifest.webmanifest',
@@ -78,7 +79,6 @@ self.addEventListener('install', function (event) {
     // isn't fulfilled from the HTTP cache; i.e., it will be from the network.
     //await cache.add(new Request(OFFLINE_URL, {cache: 'reload'}));
     //})());
-    //self.skipWaiting();
     event.waitUntil(self.skipWaiting());
 });
 
@@ -149,47 +149,58 @@ self.addEventListener('fetch', function (event) {
         console.log("try cache: ", event.request.url);
         event.respondWith(
             caches.match(event.request).then(function (cacheResponse) {
-                    console.log("Test6556");
                     if (cacheResponse) {
                         return cacheResponse;
-                    } else {
-                        if (urlFood) {
-                            console.log("fetch offline page from cache: ", event.request.url);
-                            return caches.match('offline.html');
-                        } else {
-                            console.log("fallback to network: ", event.request.url);
-                            fetch(event.request).then(
-                                function (response) {
-                                    // Check if we received a valid response
-                                    if (!response) {
-                                        console.error("fetch eventhandler error 1: no response");
-                                        return Response.error();
-                                    }
-                                    if (response.status !== 200 && response.status !== 201) { // || response.type !== 'basic'
-                                        console.warn("fetch eventhandler error 1: bad response", response.status, response.type);
-                                        return response;
-                                    }
-                                    // we received a valid response
-                                    // Caching
-                                    // IMPORTANT: Clone the response. A response is a stream
-                                    // and because we want the browser to consume the response
-                                    // as well as the cache consuming the response, we need
-                                    // to clone it so we have two streams.
-                                    let responseToCache = response.clone();
-                                    caches.open(CACHE_NAME_APP)
-                                        .then(function (cache) {
-                                            console.log(`cached ${event.request.url}`);
-                                            cache.put(event.request, responseToCache).then(function () {
-                                            });
-                                        });
-                                    return response;
-                                }, function (err_response) {
-                                    console.error("fetch eventhandler:", err_response);
-                                    return Response.error();
-                                }
-                            )
-                        }
                     }
+
+                    // error handling for Chromium dev tools, see
+                    // https://stackoverflow.com/questions/48463483/what-causes-a-failed-to-execute-fetch-on-serviceworkerglobalscope-only-if
+                    if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') {
+                        return;
+                    }
+
+                    /*if (urlFood) {
+                        console.log("fetch offline page from cache: ", event.request.url);
+                        return caches.match('offline.html');
+                    }*/
+
+                    console.log("fallback to network: ", event.request.url);
+
+                    // IMPORTANT: Clone the request. A request is a stream and
+                    // can only be consumed once. Since we are consuming this
+                    // once by cache and once by the browser for fetch, we need
+                    // to clone the response.
+                    let fetchRequest = event.request.clone();
+                    return fetch(fetchRequest).then(
+                        function (response) {
+                            // Check if we received a valid response
+                            if (!response) {
+                                console.error("fetch eventhandler error 1: no response");
+                                return Response.error();
+                            }
+                            if (response.status !== 200 && response.status !== 201) { // || response.type !== 'basic'
+                                console.warn("fetch eventhandler error 1: bad response", response.status, response.type);
+                                return response;
+                            }
+                            // we received a valid response
+                            // Caching
+                            // IMPORTANT: Clone the response. A response is a stream
+                            // and because we want the browser to consume the response
+                            // as well as the cache consuming the response, we need
+                            // to clone it so we have two streams.
+                            let responseToCache = response.clone();
+                            caches.open(CACHE_NAME_APP)
+                                .then(function (cache) {
+                                    console.log(`cached ${event.request.url}`);
+                                    cache.put(event.request, responseToCache).then(function () {
+                                    });
+                                });
+                            return response;
+                        }, function (err_response) {
+                            console.error("fetch eventhandler:", err_response);
+                            return Response.error();
+                        }
+                    )
                 }
             )
         )
