@@ -131,6 +131,11 @@ self.addEventListener('fetch', function (event) {
         //try cache first (in general)
         console.log("try cache: ", event.request.url);
         console.log("event request", event.request);
+        if (event.request.url === "https://lukaeschenbacher.github.io/") {
+            console.log("aaaargh")
+            event.request.redirect = "follow"
+            //return caches.match("index.html")
+        }
         event.respondWith(
             caches.match(event.request).catch(function () {
                 if (urlFood) {
