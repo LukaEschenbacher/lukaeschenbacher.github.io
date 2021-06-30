@@ -22,7 +22,7 @@ let urlsApp = [
     'js/materialize.min.js',
     'js/navbar.js',
     'css/materialize.min.css',
-    'style.css',
+    '/style.css',
     'script.js',
     'js/http_code.jquery.com_jquery-3.6.0.js',
     'js/http_button.glitch.me_button.js'
