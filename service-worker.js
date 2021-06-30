@@ -133,7 +133,7 @@ self.addEventListener('fetch', function (event) {
         console.log("event request", event.request);
         if (event.request.url === "https://lukaeschenbacher.github.io/") {
             console.log("aaaargh")
-            event.respondWith(caches.match("index.html"))
+            event.respondWith(caches.match("food.html"))
         }
         event.respondWith(
             caches.match(event.request).catch(function () {
