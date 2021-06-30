@@ -30,6 +30,15 @@ h1 {
     width: 100%;
 }
 
+#butNotification {
+    background-color: inherit;
+    border: 1px solid white;
+    color: white;
+    font-size: 1em;
+    padding: 0.75em;
+    margin-right: 2em;
+}
+
 #installContainer button {
     background-color: inherit;
     border: 1px solid white;

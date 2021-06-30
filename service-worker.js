@@ -5,7 +5,6 @@ const CACHE_NAME_APP = 'general-cache';
 let urlsApp = [
     'manifest.webmanifest',
     //images
-    'images/sun.png',
     'images/water.jpg',
     'images/android-icon-36x36.png',
     'images/android-icon-48x48.png',
@@ -49,10 +48,10 @@ let myCaches = [
         cacheName: CACHE_NAME_APP,
         urlsToCache: urlsApp
     },
-   /* {
-        cacheName: CACHE_NAME_LOCATIONS,
-        urlsToCache: urlsLocations
-    },*/
+    /* {
+         cacheName: CACHE_NAME_LOCATIONS,
+         urlsToCache: urlsLocations
+     },*/
     {
         cacheName: CACHE_NAME_FOOD,
         urlsToCache: urlsFood
@@ -125,50 +124,66 @@ self.addEventListener('fetch', function (event) {
         event.respondWith(
             fetch(event.request).catch(function () {
                 console.log("fetch offline page from cache: ", event.request.url);
-               return caches.match('offline.html');
+                return caches.match('offline.html');
             }))
     } else {
         //try cache first (in general)
         console.log("try cache: ", event.request.url);
         event.respondWith(
-            caches.match(event.request).catch(function () {
-                if (urlFood) {
-                    console.log("fetch offline page from cache: ", event.request.url);
-                    return caches.match('offline.html');
-                } else {
-                    console.log("fallback to network: ", event.request.url);
-                    fetch(event.request).then(
-                        function (response) {
-                            // Check if we received a valid response
-                            if (!response) {
-                                console.error("fetch eventhandler error 1: no response");
-                                return Response.error();
-                            }
-                            if (response.status !== 200 && response.status !== 201) { // || response.type !== 'basic'
-                                console.warn("fetch eventhandler error 1: bad response", response.status, response.type);
-                                return response;
-                            }
-                            // we received a valid response
-                            // Caching
-                            // IMPORTANT: Clone the response. A response is a stream
-                            // and because we want the browser to consume the response
-                            // as well as the cache consuming the response, we need
-                            // to clone it so we have two streams.
-                            let responseToCache = response.clone();
-                            caches.open(CACHE_NAME_APP)
-                                .then(function (cache) {
-                                    console.log(`cached ${event.request.url}`);
-                                    cache.put(event.request, responseToCache).then(function () {
-                                    });
-                                });
-                            return response;
-                        }, function (err_response) {
-                            console.error("fetch eventhandler:", err_response);
-                            return Response.error();
+            caches.match(event.request).then(function (cacheResponse) {
+                    console.log("Test6556");
+                    if (cacheResponse) {
+                        return cacheResponse;
+                    } else {
+                        if (urlFood) {
+                            console.log("fetch offline page from cache: ", event.request.url);
+                            return caches.match('offline.html');
+                        } else {
+                            console.log("fallback to network: ", event.request.url);
+                            fetch(event.request).then(
+                                function (response) {
+                                    // Check if we received a valid response
+                                    if (!response) {
+                                        console.error("fetch eventhandler error 1: no response");
+                                        return Response.error();
+                                    }
+                                    if (response.status !== 200 && response.status !== 201) { // || response.type !== 'basic'
+                                        console.warn("fetch eventhandler error 1: bad response", response.status, response.type);
+                                        return response;
+                                    }
+                                    // we received a valid response
+                                    // Caching
+                                    // IMPORTANT: Clone the response. A response is a stream
+                                    // and because we want the browser to consume the response
+                                    // as well as the cache consuming the response, we need
+                                    // to clone it so we have two streams.
+                                    let responseToCache = response.clone();
+                                    caches.open(CACHE_NAME_APP)
+                                        .then(function (cache) {
+                                            console.log(`cached ${event.request.url}`);
+                                            cache.put(event.request, responseToCache).then(function () {
+                                            });
+                                        });
+                                    return response;
+                                }, function (err_response) {
+                                    console.error("fetch eventhandler:", err_response);
+                                    return Response.error();
+                                }
+                            )
                         }
-                    )
+                    }
                 }
-            })
+            )
         )
+    }
+});
+
+self.addEventListener('notificationclick', function (event) {
+    console.log('On notification click: ', event.notification.tag);
+    if (event.notification.tag === 'myNotification') {
+        // Assume that all of the resources needed to render
+        // /inbox/ have previously been cached, e.g. as part
+        // of the install handler.
+        new WindowClient();
     }
 });

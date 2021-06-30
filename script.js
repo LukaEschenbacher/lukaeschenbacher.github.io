@@ -1,5 +1,6 @@
 const divInstall = document.getElementById('installContainer');
 const butInstall = document.getElementById('butInstall');
+const butNotification = document.getElementById('butNotification');
 
 /* Put code here */
 window.addEventListener('beforeinstallprompt', (event) => {
@@ -40,6 +41,26 @@ window.addEventListener('appinstalled', (event) => {
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js');
 }
+
+butNotification.addEventListener('click', async () => {
+    console.log("Notification Button clicked");
+    Notification.requestPermission().then(function (result) {
+        console.log("result: ", result);
+        if (result === 'granted') {
+            console.log("permission to show notifications");
+            navigator.serviceWorker.ready.then(function (registration) {
+                console.log("service worker ready");
+                registration.showNotification("Service Worker Ready!", {
+                    body: 'Test! Buzz!',
+                    vibrate: [200, 100, 200, 100, 200, 100, 200],
+                    tag: 'myNotification'
+                })
+            });
+        }
+    }).catch(function (result) {
+        console.log("test55");
+    })
+});
 
 /**
  * Warn the page must be served over HTTPS
