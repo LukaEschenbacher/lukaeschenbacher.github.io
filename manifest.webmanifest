@@ -45,6 +45,11 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+    {
+      "src": "images/android-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+    },
   ],
   "start_url": "index.html",
   "background_color": "#3367D6",
