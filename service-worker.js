@@ -1,7 +1,7 @@
 const CACHE_NAME_FOOD = 'food-cache';
 const CACHE_NAME_LOCATIONS = 'locations-cache';
 const CACHE_NAME_APP = 'general-cache';
-const VERSION = 2.9;
+const VERSION = 3.1;
 
 let urlsApp = [
     'manifest.webmanifest',
