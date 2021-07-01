@@ -42,7 +42,7 @@ if ('serviceWorker' in navigator) {
 }
 
 navigator.serviceWorker.ready.then(registration => {
-    registration.active.postMessage("get_version");
+    registration.active.postMessage("get_info");
 });
 
 navigator.serviceWorker.addEventListener('message', event => {
@@ -53,29 +53,31 @@ navigator.serviceWorker.addEventListener('message', event => {
         console.log("Version: ", version);
         $("#swVersion").text("SW version: " + version);
     }
+    if (event.data.hasOwnProperty('foodcache')) {
+        let exists = event.data.foodcache;
+        console.log("Food Cache: ", exists);
+        if (exists) {
+            $("#foodCacheControl").text("Delete Food Cache");
+        } else {
+            $("#foodCacheControl").text("Populate Food Cache");
+        }
+    }
 });
 
+$("#foodCacheControl").click(function () {
+    if ($(this).text() === "Delete Food Cache") {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.active.postMessage("delete_food_cache");
+        });
+        $(this).text("Populate Food Cache");
+    } else if ($(this).text() === "Populate Food Cache") {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.active.postMessage("populate_food_cache");
+        });
+        $(this).text("Delete Food Cache");
+    }
+});
 
-
-/*butNotification.addEventListener('click', async () => {
-    console.log("Notification Button clicked");
-    Notification.requestPermission().then(function (result) {
-        console.log("result: ", result);
-        if (result === 'granted') {
-            console.log("permission to show notifications");
-            navigator.serviceWorker.ready.then(function (registration) {
-                console.log("service worker ready");
-                registration.showNotification("Service Worker Ready!", {
-                    body: 'Test! Buzz!',
-                    vibrate: [200, 100, 200, 100, 200, 100, 200],
-                    tag: 'myNotification'
-                })
-            });
-        }
-    }).catch(function (result) {
-        console.log("test55");
-    })
-});*/
 
 /**
  * Warn the page must be served over HTTPS

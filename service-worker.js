@@ -1,7 +1,7 @@
 const CACHE_NAME_FOOD = 'food-cache';
 const CACHE_NAME_APP = 'general-cache';
 const CACHE_NAME_OFFLINE = 'offline-cache';
-let version = 3.9;
+let version = 4.1;
 
 let urlsApp = [
     'manifest.webmanifest',
@@ -199,19 +199,29 @@ self.addEventListener('fetch', function (event) {
 addEventListener('message', event => {
     // event is an ExtendableMessageEvent object
     console.log("Message arrived in SW: ", event.data);
-    if (event.data === "get_version") {
-        event.source.postMessage({'version': version});
+    if (event.data === "get_info") {
+        caches.has(CACHE_NAME_FOOD).then(function (exists) {
+            event.source.postMessage({'version': version,
+                'foodcache': exists});
+        })
+    }
+    if (event.data === "delete_food_cache") {
+        event.waitUntil(caches.delete(CACHE_NAME_FOOD));
+    }
+    if (event.data === "populate_food_cache") {
+        //determine food cache from list
+        let myCache = {};
+        for (let i = 0; i < myCaches.length; ++i) {
+            myCache = myCaches[i];
+            if (myCaches[i].cacheName === CACHE_NAME_FOOD) {
+                break;
+            }
+        }
+        event.waitUntil(
+            caches.open(CACHE_NAME_FOOD).then(function (cache) {
+                console.log("opened " + CACHE_NAME_FOOD);
+                return cache.addAll(myCache.urlsToCache);
+            })
+        )
     }
 });
-
-
-
-/*self.addEventListener('notificationclick', function (event) {
-    console.log('On notification click: ', event.notification.tag);
-    if (event.notification.tag === 'myNotification') {
-        // Assume that all of the resources needed to render
-        // /inbox/ have previously been cached, e.g. as part
-        // of the install handler.
-        new WindowClient();
-    }
-});*/
