@@ -1,6 +1,5 @@
 const divInstall = document.getElementById('installContainer');
 const butInstall = document.getElementById('butInstall');
-const butNotification = document.getElementById('butNotification');
 
 /* Put code here */
 window.addEventListener('beforeinstallprompt', (event) => {
@@ -42,7 +41,23 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js');
 }
 
-butNotification.addEventListener('click', async () => {
+navigator.serviceWorker.ready.then(registration => {
+    registration.active.postMessage("get_version");
+});
+
+navigator.serviceWorker.addEventListener('message', event => {
+    // event is a MessageEvent object
+    console.log("Message Event: ", event.data);
+    if (event.data.hasOwnProperty('version')) {
+        let version = event.data.version;
+        console.log("Version: ", version);
+        $("#swVersion").text("SW version: " + version);
+    }
+});
+
+
+
+/*butNotification.addEventListener('click', async () => {
     console.log("Notification Button clicked");
     Notification.requestPermission().then(function (result) {
         console.log("result: ", result);
@@ -60,7 +75,7 @@ butNotification.addEventListener('click', async () => {
     }).catch(function (result) {
         console.log("test55");
     })
-});
+});*/
 
 /**
  * Warn the page must be served over HTTPS

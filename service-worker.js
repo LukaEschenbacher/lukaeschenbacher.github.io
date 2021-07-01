@@ -1,7 +1,7 @@
 const CACHE_NAME_FOOD = 'food-cache';
-const CACHE_NAME_LOCATIONS = 'locations-cache';
 const CACHE_NAME_APP = 'general-cache';
-const VERSION = 3.1;
+const CACHE_NAME_OFFLINE = 'offline-cache';
+let version = 3.9;
 
 let urlsApp = [
     'manifest.webmanifest',
@@ -16,8 +16,6 @@ let urlsApp = [
     'images/favicon-16x16.png',
     'images/favicon-32x32.png',
     'images/favicon-96x96.png',
-    //html
-    'offline.html',
     //css, js
     'js/materialize.min.js',
     'js/navbar.js',
@@ -26,6 +24,10 @@ let urlsApp = [
     'script.js',
     'js/http_code.jquery.com_jquery-3.6.0.js',
     'js/http_button.glitch.me_button.js'
+]
+
+let urlsOffline = [
+    'offline.html'
 ]
 
 let urlsLocations = [
@@ -49,10 +51,10 @@ let myCaches = [
         cacheName: CACHE_NAME_APP,
         urlsToCache: urlsApp
     },
-    /* {
-         cacheName: CACHE_NAME_LOCATIONS,
-         urlsToCache: urlsLocations
-     },*/
+    {
+        cacheName: CACHE_NAME_OFFLINE,
+        urlsToCache: urlsOffline
+    },
     {
         cacheName: CACHE_NAME_FOOD,
         urlsToCache: urlsFood
@@ -74,31 +76,18 @@ self.addEventListener('install', function (event) {
             }
         )
     ))
-    //const cache = await caches.open(CACHE1_NAME);
-    // Setting {cache: 'reload'} in the new request will ensure that the response
-    // isn't fulfilled from the HTTP cache; i.e., it will be from the network.
-    //await cache.add(new Request(OFFLINE_URL, {cache: 'reload'}));
-    //})());
     event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
     console.log('[ServiceWorker] Activate');
-    /*event.waitUntil((async () => {
-        // Enable navigation preload if it's supported.
-        // See https://developers.google.com/web/updates/2017/02/navigation-preload
-        if ('navigationPreload' in self.registration) {
-            await self.registration.navigationPreload.enable();
-        }
-    })());*/
-
     console.log(`ServiceWorker activated at ${new Date().toLocaleTimeString()}`);
 
-    // Löschen von alten caches zu vorherigen Versionen
     // caches die nicht gelöscht werden sollen hier einfügen
-    let cacheWhitelist = [CACHE_NAME_APP, CACHE_NAME_FOOD];
-    // let cacheWhitelist = [];
+    //caches that should not be deleted
+    let cacheWhitelist = [CACHE_NAME_OFFLINE, CACHE_NAME_FOOD];
 
+    //delete caches of previous versions
     event.waitUntil(
         caches.keys().then(function (cacheNames) {
             return Promise.all(
@@ -159,10 +148,10 @@ self.addEventListener('fetch', function (event) {
                         return;
                     }
 
-                    /*if (urlFood) {
+                    if (urlFood) {
                         console.log("fetch offline page from cache: ", event.request.url);
                         return caches.match('offline.html');
-                    }*/
+                    }
 
                     console.log("fallback to network: ", event.request.url);
 
@@ -207,7 +196,17 @@ self.addEventListener('fetch', function (event) {
     }
 });
 
-self.addEventListener('notificationclick', function (event) {
+addEventListener('message', event => {
+    // event is an ExtendableMessageEvent object
+    console.log("Message arrived in SW: ", event.data);
+    if (event.data === "get_version") {
+        event.source.postMessage({'version': version});
+    }
+});
+
+
+
+/*self.addEventListener('notificationclick', function (event) {
     console.log('On notification click: ', event.notification.tag);
     if (event.notification.tag === 'myNotification') {
         // Assume that all of the resources needed to render
@@ -215,4 +214,4 @@ self.addEventListener('notificationclick', function (event) {
         // of the install handler.
         new WindowClient();
     }
-});
+});*/
