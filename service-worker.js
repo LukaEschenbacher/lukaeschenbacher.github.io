@@ -1,7 +1,7 @@
 const CACHE_NAME_FOOD = 'food-cache';
 const CACHE_NAME_APP = 'general-cache';
 const CACHE_NAME_OFFLINE = 'offline-cache';
-let version = 4.1;
+let version = 4.4;
 
 let urlsApp = [
     'manifest.webmanifest',
@@ -76,7 +76,7 @@ self.addEventListener('install', function (event) {
             }
         )
     ))
-    event.waitUntil(self.skipWaiting());
+    //event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener('activate', (event) => {
